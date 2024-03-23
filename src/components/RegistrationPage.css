@@ -1,0 +1,50 @@
+/* RegistrationPage.css */
+.registration-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #0080ff; /* Голубая рамка */
+    border-radius: 8px;
+    background-color: #f0f6ff; /* Голубой фон контейнера */
+}
+
+.registration-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #0080ff; /* Голубой цвет заголовка */
+}
+
+.registration-form {
+    width: 100%;
+}
+
+.ant-btn-primary {
+    background-color: #0080ff !important; 
+    border-color: #0080ff !important; 
+    color: #fff !important; 
+}
+
+.ant-form-item-label {
+    color: #0080ff; 
+}
+
+.ant-input {
+    border-color: #0080ff; 
+}
+
+.ant-input:focus {
+    border-color: #0080ff !important; 
+    box-shadow: 0 0 0 2px rgba(0, 128, 255, 0.2) !important; 
+}
+
+.registration-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #0080ff; 
+}
+
+.registration-link:hover {
+    color: #005c9e; 
+}

@@ -1,0 +1,73 @@
+/* HomePage.css */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff; /* Белый фон контейнера */
+    border-radius: 10px; /* Закругленные углы */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень */
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0080ff; /* Голубой цвет для заголовка */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.user-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+    box-shadow: 0 0 10px rgba(0, 128, 255, 0.1); /* Тень к фото пользователя */
+}
+
+.user-details {
+    flex: 1;
+    color: #333; /* Цвет текста информации о пользователе */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.ant-card {
+    margin-bottom: 20px; /* Расстояние между карточками */
+    border-radius: 10px; /* Закругленные углы карточки */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень карточки */
+}
+
+.ant-card-head {
+    background-color: #cceeff; /* Голубой цвет для заголовка карточки */
+    border-radius: 10px 10px 0 0; /* Закругление верхних углов заголовка */
+}
+
+.ant-card-body {
+    padding: 20px; /* Отступы внутри карточки */
+    color: #333; /* Цвет текста внутри карточки */
+}
+
+
