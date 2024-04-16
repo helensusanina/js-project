@@ -3,6 +3,7 @@ import HomePage from './components/HomePage';
 import UserProfilePage from './components/UserProfilePage';
 import RegistrationPage from './components/RegistrationPage';
 
+
 function App() {
     return (
         <Router>

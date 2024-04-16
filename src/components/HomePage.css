@@ -1,17 +1,8 @@
 /* HomePage.css */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff; /* Белый фон контейнера */
-    border-radius: 10px; /* Закругленные углы */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень */
-}
-
 .title {
     text-align: center;
     margin-bottom: 20px;
-    color: #0080ff; /* Голубой цвет для заголовка */
+    color: #0080ff;
 }
 
 .button-container {
@@ -40,12 +31,12 @@
     height: 80px;
     border-radius: 50%;
     margin-right: 20px;
-    box-shadow: 0 0 10px rgba(0, 128, 255, 0.1); /* Тень к фото пользователя */
+    box-shadow: 0 0 10px rgba(0, 128, 255, 0.1);
 }
 
 .user-details {
     flex: 1;
-    color: #333; /* Цвет текста информации о пользователе */
+    color: #333;
 }
 
 .pagination {
@@ -55,19 +46,17 @@
 }
 
 .ant-card {
-    margin-bottom: 20px; /* Расстояние между карточками */
-    border-radius: 10px; /* Закругленные углы карточки */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень карточки */
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .ant-card-head {
-    background-color: #cceeff; /* Голубой цвет для заголовка карточки */
-    border-radius: 10px 10px 0 0; /* Закругление верхних углов заголовка */
+    background-color: #cceeff;
+    border-radius: 10px 10px 0 0;
 }
 
 .ant-card-body {
-    padding: 20px; /* Отступы внутри карточки */
-    color: #333; /* Цвет текста внутри карточки */
+    padding: 20px;
+    color: #333;
 }
-
-

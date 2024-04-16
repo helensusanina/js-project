@@ -1,7 +1,7 @@
 // src/api.js
 import axios from 'axios';
 
-const API_URL = 'https://reqres.in/api/register';
+const API_URL = "http://localhost:3000";
 
 export const getUsers = async () => {
     try {

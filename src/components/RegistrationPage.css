@@ -3,16 +3,16 @@
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #0080ff; /* Голубая рамка */
+    border: 1px solid #0080ff; 
     border-radius: 8px;
-    background-color: #f0f6ff; /* Голубой фон контейнера */
+    background-color: #f0f6ff;
 }
 
 .registration-title {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
-    color: #0080ff; /* Голубой цвет заголовка */
+    color: #0080ff; 
 }
 
 .registration-form {
@@ -20,31 +20,21 @@
 }
 
 .ant-btn-primary {
-    background-color: #0080ff !important; 
-    border-color: #0080ff !important; 
-    color: #fff !important; 
+    background-color: #0080ff !important;
+    border-color: #0080ff !important;
+    color: #fff !important;
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
 }
 
-.ant-form-item-label {
-    color: #0080ff; 
+
+.ant-btn-primary:hover {
+    background-color: #005c9e !important; 
+    border-color: #005c9e !important;
 }
 
-.ant-input {
-    border-color: #0080ff; 
-}
-
-.ant-input:focus {
-    border-color: #0080ff !important; 
-    box-shadow: 0 0 0 2px rgba(0, 128, 255, 0.2) !important; 
-}
-
-.registration-link {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #0080ff; 
-}
-
-.registration-link:hover {
-    color: #005c9e; 
+.ant-btn-primary:focus {
+    box-shadow: 0 0 0 2px rgba(0, 128, 255, 0.2) !important;
 }

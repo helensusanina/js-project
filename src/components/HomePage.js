@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Input, Pagination } from 'antd';
 import './HomePage.css';
-import { users } from './data'; // Импортируем массив пользователей
-import { userPhotos } from './userPhoto'; // Импортируем массив фотографий пользователей
+import { users } from './data';
+import { userPhotos } from './userPhoto';
 
-function HomePage() {
+const HomePage = () => {
     const [searchValue, setSearchValue] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [filterType, setFilterType] = useState('all');
@@ -47,10 +47,9 @@ function HomePage() {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = currentPage * pageSize;
     const usersOnPage = filteredUsersWithFilters.slice(startIndex, endIndex);
-    const path = "https://images.unsplash.com/photo-1712287633648-0c0f556d88ec?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
     return (
-        <div className="container">
+        <>
             <h1 className="title">Главная страница</h1>
             <div className="button-container">
                 <Link to="/registration">
@@ -86,12 +85,12 @@ function HomePage() {
             <Pagination
                 className="pagination"
                 current={currentPage}
-                total={filteredUsers.length} // Общее количество пользователей
+                total={filteredUsers.length}
                 pageSize={pageSize}
                 onChange={handlePageChange}
             />
-        </div>
+        </>
     );
-}
+};
 
 export default HomePage;
