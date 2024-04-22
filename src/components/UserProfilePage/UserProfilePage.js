@@ -1,19 +1,20 @@
+// UserProfilePage.js
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { users } from './data';
-import { userPhotos } from './userPhoto';
+import { users } from '/project/my-app/src/components/data.js';
+import { userPhotos } from '/project/my-app/src/components/userPhoto.js';
 import './UserProfilePage.css';
+import UserProfileInfo from './UserProfileInfo';
+import UserProfileForm from './UserProfileForm';
 
 function UserProfilePage() {
     const { userId } = useParams();
     const [user, setUser] = useState(null);
     const [editing, setEditing] = useState(false);
-    const [editedUser, setEditedUser] = useState(null); 
 
     useEffect(() => {
-        const userData = users.find((user) => user.id === parseInt(userId));
+        const userData = users.find((user) => user.id === +userId);
         setUser(userData);
-        setEditedUser(userData); 
     }, [userId]);
 
     const handleEdit = () => {
@@ -22,21 +23,20 @@ function UserProfilePage() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setEditedUser({ ...editedUser, [name]: value });
+        setUser({ ...user, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`https://reqres.in/api/users/${userId}`, { 
+            const response = await fetch(`https://reqres.in/api/users/${userId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(editedUser),
+                body: JSON.stringify(user),
             });
             if (response.ok) {
-                setUser({ ...editedUser });
                 setEditing(false);
                 console.log('Данные пользователя успешно обновлены.');
             } else {
@@ -56,26 +56,15 @@ function UserProfilePage() {
             <h1>Страница профиля пользователя</h1>
             <div className="user-profile">
                 <img src={userPhotos[user.id - 1]} alt="Пользователь" className="user-photo" />
-                <div className="user-details">
-                    {editing ? (
-                        <form onSubmit={handleSubmit}>
-                            <p><strong>ID:</strong> {user.id}</p>
-                            <input type="text" name="name" value={editedUser.name || ''} onChange={handleInputChange} />
-                            <input type="text" name="email" value={editedUser.email || ''} onChange={handleInputChange} />
-                            <button type="submit">Сохранить</button>
-                        </form>
-                    ) : (
-                        <>
-                            <p><strong>ID:</strong> {user.id}</p>
-                            <p><strong>Имя:</strong> {user.name}</p>
-                            <p><strong>Email:</strong> {user.email}</p>
-                            <button className="edit-button" onClick={handleEdit}>Редактировать</button>
-                        </>
-                    )}
-                </div>
+                {editing ? (
+                    <UserProfileForm user={user} onChange={handleInputChange} onSubmit={handleSubmit} />
+                ) : (
+                    <UserProfileInfo user={user} onEdit={handleEdit} />
+                )}
             </div>
             <Link to="/" className="return-link">Вернуться на главную</Link>
         </div>
     );
 }
+
 export default UserProfilePage;

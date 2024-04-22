@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input, Button, message, Spin } from 'antd';
-import { register } from './api';
+import { register } from '/project/my-app/src/components/api.js';
 import './RegistrationPage.css';
 
 function RegistrationPage() {

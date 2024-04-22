@@ -1,32 +1,36 @@
-
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Input, Pagination } from 'antd';
 import './HomePage.css';
-import { users } from './data';
-import { userPhotos } from './userPhoto';
+import { users } from '/project/my-app/src/components/data.js';
+import { userPhotos } from '/project/my-app/src/components/userPhoto.js';
+
+const initialFilters = {
+    searchValue: '',
+    currentPage: 1,
+    filterType: 'all'
+};
 
 const HomePage = () => {
-    const [searchValue, setSearchValue] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [filterType, setFilterType] = useState('all');
+    const [filters, setFilters] = useState(initialFilters);
 
     const handlePageChange = (page) => {
-        setCurrentPage(page);
+        setFilters({ ...filters, currentPage: page });
     };
 
     const handleSearch = (e) => {
-        setSearchValue(e.target.value);
+        const { value } = e.target;
+        setFilters({ ...filters, searchValue: value });
     };
 
-    const applyFilters = (filteredUsers) => {
-        switch (filterType) {
+    const applyFilters = (filteredUsers, type) => {
+        switch (type) {
             case 'even':
                 return filteredUsers.filter((user) => user.id % 2 === 0);
             case 'odd':
                 return filteredUsers.filter((user) => user.id % 2 !== 0);
             case 'startsWithA':
-                return filteredUsers.filter((user) => /^А/.test(user.name));
+                return filteredUsers.filter((user) => /^А/i.test(user.name));
             case 'startsWithB':
                 return filteredUsers.filter((user) => /^B/i.test(user.name));
             default:
@@ -34,16 +38,22 @@ const HomePage = () => {
         }
     };
 
-    const filteredUsers = users.filter((user) => {
-        return (
-            user.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchValue.toLowerCase())
-        );
-    });
+    const filteredUsers = useMemo(() => {
+        const { searchValue } = filters;
+        const lowerSearchValue = searchValue ? searchValue.toLowerCase() : '';
+        return users.filter((user) => (
+            user.name.toLowerCase().includes(lowerSearchValue) ||
+            user.email.toLowerCase().includes(lowerSearchValue)
+        ));
+    }, [filters]);
 
-    const filteredUsersWithFilters = applyFilters(filteredUsers);
+    const filteredUsersWithFilters = useMemo(() => {
+        const { filterType } = filters;
+        return applyFilters(filteredUsers, filterType);
+    }, [filteredUsers, filters]);
 
     const pageSize = 5;
+    const { currentPage } = filters;
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = currentPage * pageSize;
     const usersOnPage = filteredUsersWithFilters.slice(startIndex, endIndex);
@@ -59,15 +69,15 @@ const HomePage = () => {
             <Input
                 className="search-input"
                 placeholder="Поиск по имени или почте"
-                value={searchValue}
+                value={filters.searchValue}
                 onChange={handleSearch}
             />
             <div className="filter-container">
-                <Button onClick={() => setFilterType('all')}>Все</Button>
-                <Button onClick={() => setFilterType('even')}>Четные ID</Button>
-                <Button onClick={() => setFilterType('odd')}>Нечетные ID</Button>
-                <Button onClick={() => setFilterType('startsWithA')}>Имена на А</Button>
-                <Button onClick={() => setFilterType('startsWithB')}>Имена на B</Button>
+                <Button onClick={() => setFilters({ ...filters, currentPage: 1, filterType: 'all' })}>Все</Button>
+                <Button onClick={() => setFilters({ ...filters, currentPage: 1, filterType: 'even' })}>Четные ID</Button>
+                <Button onClick={() => setFilters({ ...filters, currentPage: 1, filterType: 'odd' })}>Нечетные ID</Button>
+                <Button onClick={() => setFilters({ ...filters, currentPage: 1, filterType: 'startsWithA' })}>Имена на А</Button>
+                <Button onClick={() => setFilters({ ...filters, currentPage: 1, filterType: 'startsWithB' })}>Имена на B</Button>
             </div>
             {usersOnPage.map((user) => (
                 <Card key={user.id} title="Карточка пользователя">
