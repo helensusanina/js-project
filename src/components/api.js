@@ -1,22 +1,22 @@
-// src/api.js
+
 import axios from 'axios';
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://reqres.in/api";
 
 export const getUsers = async () => {
     try {
         const response = await axios.get(API_URL);
-        return response.data.data; // Returning only the array of users
+        return response.data.data; 
     } catch (error) {
         console.error('Error fetching users:', error);
-        throw error; // Throwing the error for handling in components
+        throw error; 
     }
 };
 
 export const getUserById = async (userId) => {
     try {
         const response = await axios.get(`${API_URL}/${userId}`);
-        return response.data.data; // Returning data of the specific user
+        return response.data.data;
     } catch (error) {
         console.error(`Error fetching user with ID ${userId}:`, error);
         throw error;
@@ -26,7 +26,7 @@ export const getUserById = async (userId) => {
 export const addUser = async (userData) => {
     try {
         const response = await axios.post(API_URL, userData);
-        return response.data; // Returning data of the new user
+        return response.data; 
     } catch (error) {
         console.error('Error adding user:', error);
         throw error;
@@ -36,7 +36,7 @@ export const addUser = async (userData) => {
 export const updateUser = async (userId, updatedData) => {
     try {
         const response = await axios.patch(`${API_URL}/${userId}`, updatedData);
-        return response.data; // Returning data of the updated user
+        return response.data; 
     } catch (error) {
         console.error(`Error updating user with ID ${userId}:`, error);
         throw error;
@@ -46,7 +46,7 @@ export const updateUser = async (userId, updatedData) => {
 export const register = async (userData) => {
     try {
         const response = await axios.post(API_URL, userData);
-        return response.data; // Returning data from registration response
+        return response.data;
     } catch (error) {
         console.error('Error registering user:', error);
         throw error;

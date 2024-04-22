@@ -11,7 +11,7 @@
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 128, 255, 0.1); /* Небольшая голубая тень */
+    box-shadow: 0 2px 4px rgba(0, 128, 255, 0.1);
 }
 
 .user-photo {
@@ -32,7 +32,7 @@
 
 h1 {
     text-align: center;
-    color: #0080ff; /* Голубой цвет для заголовка */
+    color: #0080ff; 
 }
 
 .return-link {
@@ -51,7 +51,6 @@ h1 {
     background-color: #0056b3;
 }
 
-/* Добавленные стили для формы редактирования */
 form {
     display: flex;
     flex-direction: column;

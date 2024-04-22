@@ -8,12 +8,12 @@ function UserProfilePage() {
     const { userId } = useParams();
     const [user, setUser] = useState(null);
     const [editing, setEditing] = useState(false);
-    const [editedUser, setEditedUser] = useState(null); // Изменено: Начальное значение null
+    const [editedUser, setEditedUser] = useState(null); 
 
     useEffect(() => {
         const userData = users.find((user) => user.id === parseInt(userId));
         setUser(userData);
-        setEditedUser(userData); // Изменено: Установка начального значения для editedUser
+        setEditedUser(userData); 
     }, [userId]);
 
     const handleEdit = () => {
@@ -28,7 +28,7 @@ function UserProfilePage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`https://reqres.in/api/users/${userId}`, { // Изменено: Исправлен URL для PATCH запроса
+            const response = await fetch(`https://reqres.in/api/users/${userId}`, { 
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
