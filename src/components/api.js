@@ -1,68 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { getUsers, getUserById, updateUser } from '/project/my-app/src/components/api.js';
-import { userPhotos } from '/project/my-app/src/components/userPhoto.js';
-import './UserProfilePage.css';
-import UserProfileInfo from './UserProfileInfo';
-import UserProfileForm from './UserProfileForm';
+import axios from 'axios';
 
-function UserProfilePage() {
-    const { userId } = useParams();
-    const [user, setUser] = useState(null);
-    const [editing, setEditing] = useState(false);
+const API_URL = 'https://reqres.in/api/register';
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const userData = await getUserById(userId);
-                setUser(userData);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
-
-        fetchUser();
-    }, [userId]);
-
-    const handleEdit = () => {
-        setEditing(true);
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUser({ ...user, [name]: value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await updateUser(userId, user);
-            setUser(response);
-            setEditing(false);
-            console.log('Данные пользователя успешно обновлены.');
-        } catch (error) {
-            console.error('Ошибка при обновлении данных пользователя:', error);
-        }
-    };
-
-    if (!user) {
-        return <div>Загрузка...</div>;
+export const getUsers = async () => {
+    try {
+        const response = await axios.get(API_URL);
+        return response.data.data; // Returning only the array of users
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        throw error; // Throwing the error for handling in components
     }
-
-    return (
-        <div className="container">
-            <h1>Страница профиля пользователя</h1>
-            <div className="user-profile">
-                <img src={userPhotos[user.id - 1]} alt="Пользователь" className="user-photo" />
-                {editing ? (
-                    <UserProfileForm user={user} onChange={handleInputChange} onSubmit={handleSubmit} />
-                ) : (
-                    <UserProfileInfo user={user} onEdit={handleEdit} />
-                )}
-            </div>
-            <Link to="/" className="return-link">Вернуться на главную</Link>
-        </div>
-    );
-}
-
-export default UserProfilePage;
+};
+export const getUserById = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/${userId}`);
+        return response.data.data; // Returning data of the specific user
+    } catch (error) {
+        console.error(`Error fetching user with ID ${userId}:`, error);
+        throw error;
+    }
+};
+export const addUser = async (userData) => {
+    try {
+        const response = await axios.post(API_URL, userData);
+        return response.data; // Returning data of the new user
+    } catch (error) {
+        console.error('Error adding user:', error);
+        throw error;
+    }
+};
+export const updateUser = async (userId, updatedData) => {
+    try {
+        const response = await axios.patch(`${API_URL}/${userId}`, updatedData);
+        return response.data; // Returning data of the updated user
+    } catch (error) {
+        console.error(`Error updating user with ID ${userId}:`, error);
+        throw error;
+    }
+};
+export const register = async (userData) => {
+    try {
+        const response = await axios.post(API_URL, userData);
+        return response.data; // Returning data from registration response
+    } catch (error) {
+        console.error('Error registering user:', error);
+        throw error;
+    }
+};
