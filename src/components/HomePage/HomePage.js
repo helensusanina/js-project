@@ -5,6 +5,7 @@ import './HomePage.css';
 import { users } from '../data.js';
 import { userPhotos } from '../userPhoto.js';
 
+
 const initialFilters = {
     searchValue: '',
     currentPage: 1,

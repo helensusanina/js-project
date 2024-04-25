@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const API_URL = 'https://reqres.in/api/register';
-
 export const getUsers = async () => {
     try {
         const response = await axios.get(API_URL);
