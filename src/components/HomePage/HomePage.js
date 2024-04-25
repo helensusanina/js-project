@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Input, Pagination } from 'antd';
 import './HomePage.css';
-import { users } from '/project/my-app/src/components/data.js';
-import { userPhotos } from '/project/my-app/src/components/userPhoto.js';
+import { users } from '../data.js';
+import { userPhotos } from '../userPhoto.js';
 
 const initialFilters = {
     searchValue: '',
@@ -12,6 +12,7 @@ const initialFilters = {
 };
 
 const HomePage = () => {
+    
     const [filters, setFilters] = useState(initialFilters);
 
     const handlePageChange = (page) => {
@@ -23,19 +24,16 @@ const HomePage = () => {
         setFilters({ ...filters, searchValue: value });
     };
 
+    const filterFunctions = {
+        all: (users) => users,
+        even: (users) => users.filter((user) => user.id % 2 === 0),
+        odd: (users) => users.filter((user) => user.id % 2 !== 0),
+        startsWithA: (users) => users.filter((user) => /^А/i.test(user.name)),
+        startsWithB: (users) => users.filter((user) => /^В/i.test(user.name)),
+    };
+
     const applyFilters = (filteredUsers, type) => {
-        switch (type) {
-            case 'even':
-                return filteredUsers.filter((user) => user.id % 2 === 0);
-            case 'odd':
-                return filteredUsers.filter((user) => user.id % 2 !== 0);
-            case 'startsWithA':
-                return filteredUsers.filter((user) => /^А/i.test(user.name));
-            case 'startsWithB':
-                return filteredUsers.filter((user) => /^B/i.test(user.name));
-            default:
-                return filteredUsers;
-        }
+        return filterFunctions[type] ? filterFunctions[type](filteredUsers) : filteredUsers;
     };
 
     const filteredUsers = useMemo(() => {

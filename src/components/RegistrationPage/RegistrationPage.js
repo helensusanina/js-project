@@ -26,7 +26,7 @@ function RegistrationPage() {
     return (
         <div className="registration-container">
             <h1 className="registration-title">Страница регистрации</h1>
-            <Spin spinning={loading}> {/* Индикатор загрузки */}
+            <Spin spinning={loading}> {}
                 <Form name="registration_form" onFinish={onFinish} className="registration-form">
                     <Form.Item
                         label="Имя"

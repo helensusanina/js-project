@@ -41,7 +41,7 @@ export const updateUser = async (userId, updatedData) => {
 export const register = async (userData) => {
     try {
         const response = await axios.post(API_URL, userData);
-        return response.data; // Returning data from registration response
+        return response.data; 
     } catch (error) {
         console.error('Error registering user:', error);
         throw error;
