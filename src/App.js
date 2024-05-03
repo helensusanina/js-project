@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import UserProfilePage from './components/UserProfilePage/UserProfilePage';
 import RegistrationPage from './components/RegistrationPage/RegistrationPage';
@@ -8,12 +8,16 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} exact />
-                <Route path="/user/:userId" element={<UserProfilePage />} />
+                <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+                <Route path="/user/:userId" element={<PrivateRoute><UserProfilePage /></PrivateRoute>} />
                 <Route path="/registration" element={<RegistrationPage />} />
             </Routes>
-        </Router>
+        </Router >
     );
 }
+const PrivateRoute = ({ children }) => {
+    const isAuthenticated = localStorage.getItem('tokens');
+    return isAuthenticated ? children : <Navigate to="/registration" />;
+};
 
 export default App;

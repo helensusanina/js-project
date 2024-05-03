@@ -1,32 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, message, Spin } from 'antd';
-import { register } from '/project/my-app/src/components/api.js';
+import { Form, Input, Button, message, Spin, Select } from 'antd';
+import { register, getAllUsersEmails } from '../api.js';
 import './RegistrationPage.css';
 
-function RegistrationPage() {
-    const navigate = useNavigate(); 
 
-    const [loading, setLoading] = useState(false); 
+function RegistrationPage() {
+    const navigate = useNavigate();
+    const [emails, setEmails] = useState([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        const fetchEmails = async () => {
+            const emails = await getAllUsersEmails();
+            const options = emails.map(email => ({ value: email, label: email }));
+            setEmails(options);
+        };
+        fetchEmails();
+    }, []);
 
     const onFinish = async (values) => {
-        setLoading(true); 
+        setLoading(true);
         try {
-            await register(values); 
+            await register(values);
             message.success('Регистрация успешна');
-            navigate('/'); 
+            navigate('/');
         } catch (error) {
-            console.error('Ошибка регистрации:', error);
-            message.error('Ошибка регистрации');
+            console.error('Ошибка регистрации:', error.message);
+            message.error('Ошибка регистрации: ' + error.message);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
     return (
         <div className="registration-container">
             <h1 className="registration-title">Страница регистрации</h1>
-            <Spin spinning={loading}> {}
+            <Spin spinning={loading}> {/* Индикатор загрузки */}
                 <Form name="registration_form" onFinish={onFinish} className="registration-form">
                     <Form.Item
                         label="Имя"
@@ -36,11 +45,17 @@ function RegistrationPage() {
                         <Input />
                     </Form.Item>
                     <Form.Item
+                        label="Ссылка на аватар"
+                        name="avatarUrl"
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
                         label="Почта"
                         name="email"
                         rules={[{ required: true, message: 'Пожалуйста, введите вашу почту!' }]}
                     >
-                        <Input />
+                        <Select options={emails} />
                     </Form.Item>
                     <Form.Item
                         label="Пароль"
