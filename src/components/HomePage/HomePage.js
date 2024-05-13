@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Input, Pagination } from 'antd';
 import './HomePage.css';
+import { getAllUsers } from '../api';
 
 const initialFilters = {
     searchValue: '',
@@ -9,14 +10,19 @@ const initialFilters = {
     filterType: 'all'
 };
 
-const getAllUsers = () => {
-    const keys = Object.keys(localStorage).filter((current) => current !== 'tokens');
-    return keys.map(key => JSON.parse(localStorage.getItem(key)));
-}
-
 const HomePage = () => {
     const [filters, setFilters] = useState(initialFilters);
-    const users = getAllUsers();
+    const [users, setUsers] = useState([]);
+    const myProfileData = JSON.parse(localStorage.getItem("my_profile_data"));
+
+    const fetchUsers = async () => {
+        const usersData = await getAllUsers();
+        setUsers(usersData);
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const handlePageChange = (page) => {
         setFilters({ ...filters, currentPage: page });
@@ -31,8 +37,8 @@ const HomePage = () => {
         const filterMap = {
             'even': user => user.id % 2 === 0,
             'odd': user => user.id % 2 !== 0,
-            'startsWithA': user => /^А/i.test(user.name),
-            'startsWithB': user => /^B/i.test(user.name),
+            'startsWithG': user => /^G/i.test(user.first_name),
+            'startsWithE': user => /^E/i.test(user.first_name),
             'all': user => true
         };
         return users.filter(filterMap[type]);
@@ -41,7 +47,7 @@ const HomePage = () => {
     const filteredUsers = useMemo(() => {
         const lowerSearchValue = filters.searchValue.toLowerCase();
         return users.filter(user =>
-            user.name.toLowerCase().includes(lowerSearchValue) ||
+            user.first_name.toLowerCase().includes(lowerSearchValue) ||
             user.email.toLowerCase().includes(lowerSearchValue)
         );
     }, [filters.searchValue, users]);
@@ -55,45 +61,71 @@ const HomePage = () => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = currentPage * pageSize;
     const usersOnPage = filteredUsersWithFilters.slice(startIndex, endIndex);
+    const filterTypes = [
+        { label: 'Все', value: 'all' },
+        { label: 'Четные ID', value: 'even' },
+        { label: 'Нечетные ID', value: 'odd' },
+        { label: 'Имена на G', value: 'startsWithG' },
+        { label: 'Имена на E', value: 'startsWithE' },
+    ];
 
     return (
         <>
             <h1 className="title">Главная страница</h1>
-            <div className="button-container">
-                <Link to="/registration">
-                    <Button type="primary">Регистрация</Button>
-                </Link>
-            </div>
+            {!localStorage.getItem("my_profile_data") &&
+                < div className="button-container">
+                    <Link to="/registration">
+                        <Button type="primary">Регистрация</Button>
+                    </Link>
+                </div >
+            }
             <Input
                 className="search-input"
                 placeholder="Поиск по имени или почте"
                 value={filters.searchValue}
                 onChange={handleSearch}
             />
-            <div className="filter-container">
-                <Button onClick={() => setFilters(prev => ({ ...prev, currentPage: 1, filterType: 'all' }))}>Все</Button>
-                <Button onClick={() => setFilters(prev => ({ ...prev, currentPage: 1, filterType: 'even' }))}>Четные ID</Button>
-                <Button onClick={() => setFilters(prev => ({ ...prev, currentPage: 1, filterType: 'odd' }))}>Нечетные ID</Button>
-                <Button onClick={() => setFilters(prev => ({ ...prev, currentPage: 1, filterType: 'startsWithA' }))}>Имена на А</Button>
-                <Button onClick={() => setFilters(prev => ({ ...prev, currentPage: 1, filterType: 'startsWithB' }))}>Имена на B</Button>
-            </div>
-            {usersOnPage.map(user => (
-                <Card key={user.id} title="Карточка пользователя">
-                    <Link to={`/user/${user.id}`} className="user-link">
+            {myProfileData &&
+                <Card title="Мой профиль">
+                    <Link to={`/user/profile`} className="user-link">
                         <div className="user-info">
-                            <img src={user.avatarUrl} alt="avatar" className="user-photo" />
+                            <img src={myProfileData.avatar} alt="avatar" className="user-photo" />
                             <div className="user-details">
-                                <p><strong>Имя:</strong> {user.name}</p>
-                                <p><strong>Почта:</strong> {user.email}</p>
+                                <p><strong>Имя:</strong> {`${myProfileData.first_name}`}</p>
+                                <p><strong>Почта:</strong> {myProfileData.email}</p>
                             </div>
                         </div>
                     </Link>
-                </Card>
+                </Card >
+            }
+            {filterTypes.map((filterType) => (
+                <Button
+                    key={filterType.value}
+                    onClick={() => setFilters((prev) =>
+                        ({ ...prev, currentPage: 1, filterType: filterType.value }))}
+                >
+                    {filterType.label}
+                </Button>
             ))}
+            {
+                usersOnPage.map(user => (
+                    <Card key={user.id} title="Карточка пользователя">
+                        <Link to={`/user/${user.id}`} className="user-link">
+                            <div className="user-info">
+                                <img src={user.avatar} alt="avatar" className="user-photo" />
+                                <div className="user-details">
+                                    <p><strong>Имя:</strong> {`${user.first_name} ${user?.last_name || ''}`}</p>
+                                    <p><strong>Почта:</strong> {user.email}</p>
+                                </div>
+                            </div>
+                        </Link>
+                    </Card>
+                ))
+            }
             <Pagination
                 className="pagination"
                 current={currentPage}
-                total={filteredUsers.length}
+                total={filteredUsersWithFilters.length}
                 pageSize={pageSize}
                 onChange={handlePageChange}
             />

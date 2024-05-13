@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, message, Spin, Select } from 'antd';
-import { register, getAllUsersEmails } from '../api.js';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Form, Input, Button, message, Spin } from 'antd';
+import { register } from '../api.js';
 import './RegistrationPage.css';
 
 
 function RegistrationPage() {
     const navigate = useNavigate();
-    const [emails, setEmails] = useState([]);
     const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        const fetchEmails = async () => {
-            const emails = await getAllUsersEmails();
-            const options = emails.map(email => ({ value: email, label: email }));
-            setEmails(options);
-        };
-        fetchEmails();
-    }, []);
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -39,14 +30,14 @@ function RegistrationPage() {
                 <Form name="registration_form" onFinish={onFinish} className="registration-form">
                     <Form.Item
                         label="Имя"
-                        name="name"
+                        name="first_name"
                         rules={[{ required: true, message: 'Пожалуйста, введите ваше имя!' }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Ссылка на аватар"
-                        name="avatarUrl"
+                        name="avatar"
                     >
                         <Input />
                     </Form.Item>
@@ -55,7 +46,7 @@ function RegistrationPage() {
                         name="email"
                         rules={[{ required: true, message: 'Пожалуйста, введите вашу почту!' }]}
                     >
-                        <Select options={emails} />
+                        <Input />
                     </Form.Item>
                     <Form.Item
                         label="Пароль"
@@ -71,7 +62,6 @@ function RegistrationPage() {
                     </Form.Item>
                 </Form>
             </Spin>
-            <Link to="/" className="registration-link">На главную</Link>
         </div>
     );
 }

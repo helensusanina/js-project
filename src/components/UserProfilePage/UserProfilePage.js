@@ -4,16 +4,25 @@ import { Link, useParams } from 'react-router-dom';
 import './UserProfilePage.css';
 import UserProfileInfo from './UserProfileInfo';
 import UserProfileForm from './UserProfileForm';
-import { updateUser } from '../api';
+import { getUserById, updateUser } from '../api';
 
 function UserProfilePage() {
     const { userId } = useParams();
     const [user, setUser] = useState(null);
     const [editing, setEditing] = useState(false);
+    const isMineProfile = userId === 'profile';
+
+    const getUserData = async () => {
+        let userData;
+        if (isMineProfile) {
+            userData = JSON.parse(localStorage.getItem("my_profile_data"))
+        }
+        else userData = await getUserById(userId);
+        setUser(userData);
+    }
 
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem(userId))
-        setUser(userData);
+        getUserData()
     }, [userId]);
 
     const handleEdit = () => {
@@ -23,8 +32,7 @@ function UserProfilePage() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const newUserData = { ...user, [name]: value };
-        localStorage.setItem(userId, JSON.stringify(newUserData))
-        setUser({ ...user, [name]: value });
+        setUser(newUserData);
     };
 
     const handleSubmit = async (e) => {
@@ -50,8 +58,8 @@ function UserProfilePage() {
         <div className="container">
             <h1>Страница профиля пользователя</h1>
             <div className="user-profile">
-                <img src={user.avatarUrl} alt="Пользователь" className="user-photo" />
-                {editing ? (
+                <img src={user.avatar} alt="Пользователь" className="user-photo" />
+                {isMineProfile && editing ? (
                     <UserProfileForm user={user} onChange={handleInputChange} onSubmit={handleSubmit} />
                 ) : (
                     <UserProfileInfo user={user} onEdit={handleEdit} />

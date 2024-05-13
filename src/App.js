@@ -16,7 +16,7 @@ function App() {
     );
 }
 const PrivateRoute = ({ children }) => {
-    const isAuthenticated = localStorage.getItem('tokens');
+    const isAuthenticated = localStorage.getItem('my_profile_data');
     return isAuthenticated ? children : <Navigate to="/registration" />;
 };
 

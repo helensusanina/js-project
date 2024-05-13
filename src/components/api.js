@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'https://reqres.in/api';
 
-const getAllUsersEmails = async () => {
+const getAllUsers = async () => {
     try {
         let isLastPage = false;
         let currentPage = 1;
@@ -10,7 +10,7 @@ const getAllUsersEmails = async () => {
         while (!isLastPage) {
             const { data } = await axios.get(`${API_URL}/users?page=${currentPage++}`);
             isLastPage = data.page === data['total_pages'];
-            users.push(...data.data.map(user => user.email));
+            users.push(...data.data);
         }
         return users; // Returning only the array of users
     } catch (error) {
@@ -21,7 +21,7 @@ const getAllUsersEmails = async () => {
 
 const getUserById = async (userId) => {
     try {
-        const response = await axios.get(`${API_URL}/${userId}`);
+        const response = await axios.get(`${API_URL}/users/${userId}`);
         return response.data.data; // Returning data of the specific user
     } catch (error) {
         console.error(`Error fetching user with ID ${userId}:`, error);
@@ -32,6 +32,8 @@ const getUserById = async (userId) => {
 const updateUser = async (userId, updatedData) => {
     try {
         const response = await axios.patch(`${API_URL}/users/${userId}`, updatedData);
+        const oldProfileData = JSON.parse(localStorage.getItem("my_profile_data"))
+        localStorage.setItem("my_profile_data", JSON.stringify({ ...oldProfileData, ...updatedData }))
         return response; // Returning data of the updated user
     } catch (error) {
         console.error(`Error updating user with ID ${userId}:`, error);
@@ -41,25 +43,19 @@ const updateUser = async (userId, updatedData) => {
 
 const register = async (userData) => {
     try {
+        const userEmail = userData.email;
+        userData.email = 'george.bluth@reqres.in'
         const response = await axios.post(`${API_URL}/register`, userData);
-        const { token, id } = response.data;
-        const existingTokens = JSON.parse(localStorage.getItem('tokens')) || [];
+        const { token } = response.data;
 
-        if (existingTokens.includes(token)) {
-            throw new Error('Пользователь уже зарегестрирован');
-        }
-
-        existingTokens.push(token);
-        localStorage.setItem('tokens', JSON.stringify(existingTokens));
-
-        const userDataWithoutPassword = { ...userData };
+        const userDataWithoutPassword = { ...userData, email: userEmail, id: 0 };
         delete userDataWithoutPassword.password;
 
-        if (!userDataWithoutPassword.avatarUrl) {
-            userDataWithoutPassword.avatarUrl = '/default.png';
+        if (!userDataWithoutPassword.avatar) {
+            userDataWithoutPassword.avatar = '/default.png';
         }
 
-        localStorage.setItem(id, JSON.stringify({ ...userDataWithoutPassword, token, id }));
+        localStorage.setItem('my_profile_data', JSON.stringify({ ...userDataWithoutPassword, token }));
         return token;
     } catch (error) {
         console.error('Error registering user:', error);
@@ -68,4 +64,4 @@ const register = async (userData) => {
 };
 
 
-export { getAllUsersEmails, getUserById, updateUser, register }
+export { getAllUsers, getUserById, updateUser, register }
